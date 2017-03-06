@@ -63,6 +63,12 @@ class ViewController: UIViewController {
        
         taxRateLabel.text = ""
         finalTotalLabel.text = ""
+        
+        //this will allow me to run a function whenever a user taps on the screen
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        
+        view.addGestureRecognizer(tap)
+        
     }
     
     //This is a function I created to handle formatting my final result dollar amount so that is shows up as $X.XX
@@ -90,6 +96,12 @@ class ViewController: UIViewController {
         
         present(alertController, animated: true)
         
+    }
+    
+    //function to dismiss keyboard when user taps on the screen
+    func dismissKeyboard() {
+        
+        view.endEditing(true)
     }
 
     //This function is tied to the "Calculate" button
