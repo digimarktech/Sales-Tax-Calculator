@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var taxRateLabel: UILabel!
     @IBOutlet weak var finalTotalLabel: UILabel!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var zipcodeAloneTextField: UITextField!
     
@@ -69,6 +70,9 @@ class ViewController: UIViewController {
         
         view.addGestureRecognizer(tap)
         
+        //Loading spinner is true by default. This line stops it when app loads.
+        activityIndicator.stopAnimating()
+        
     }
     
     //This is a function I created to handle formatting my final result dollar amount so that is shows up as $X.XX
@@ -107,6 +111,9 @@ class ViewController: UIViewController {
     //This function is tied to the "Calculate" button
     @IBAction func calculateButtonPressed(_ sender: Any) {
         
+        //Show the loading spinner
+        activityIndicator.startAnimating()
+        
         //Search based on address
         if dollarAmountTextField.text != "" && addressTextField.text != "" && cityTextField.text != "" && stateTextField.text != "" && zipcodeFromAddressTextField.text != "" && zipcodeAloneTextField.text == "" {
             
@@ -130,6 +137,8 @@ class ViewController: UIViewController {
             
             //Here I am using the Alamofire library to send a get request using my complete URL and working with the JSON response coming back
             Alamofire.request(completeURL).responseJSON { response in
+                
+                
                 //debugPrint(response)
                 
                 
@@ -157,6 +166,9 @@ class ViewController: UIViewController {
                             let result = formattedDollarAmount + taxAmount
                             
                             let formattedResult = self.formatCurrency(dollarAmount: result)
+                            
+                            //Stop the loading spinner just before we display the data
+                            self.activityIndicator.stopAnimating()
                             
                             self.taxRate = totalRate
                             
@@ -206,6 +218,8 @@ class ViewController: UIViewController {
                             let result = formattedDollarAmount + taxAmount
                             
                             let formattedResult = self.formatCurrency(dollarAmount: result) //Formatting the finally result to put it in currency format
+                            
+                            self.activityIndicator.stopAnimating()
                             
                             self.taxRate = totalRate //Store the totalRate to the computed property taxRate, which will update the user interface
                             
